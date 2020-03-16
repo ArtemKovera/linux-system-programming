@@ -1,4 +1,5 @@
 // Demonstration of using SIGALRM to force a timeout
+//You can press "CTRL\" to quit the program when running
 
 #include <stdio.h>
 #include <setjmp.h>
@@ -7,26 +8,26 @@
 
 void timeoutHandler(int unused)
 {
-  // Nothing to do
+    // Nothing to do
 }
 
 int tGetNum(int timeout)
 {
-  int n;
-  char line[100];
-  struct sigaction Action;
+    int n;
+    char line[100];
+    struct sigaction Action;
 
-  Action.sa_handler = timeoutHandler;
-  sigemptyset(&Action.sa_mask);
-  Action.sa_flags = 0; 
-  sigaction(SIGALRM, &Action, NULL);
+    Action.sa_handler = timeoutHandler;
+    sigemptyset(&Action.sa_mask);
+    Action.sa_flags = 0; 
+    sigaction(SIGALRM, &Action, NULL);
 
-  alarm(timeout);
-  n = read(0, line, 100);
-  alarm(0);  // Cancel alarm
-  if (n == -1 && errno == EINTR) return -1;
-  n = atoi(line);
-  return n;
+    alarm(timeout);
+    n = read(0, line, 100);
+    alarm(0);  // Cancel alarm
+    if (n == -1 && errno == EINTR) return -1;
+    n = atoi(line);
+    return n;
 }
 
 int main()
@@ -40,5 +41,5 @@ int main()
         else printf("You entered %d\n", num);
     }
 
-  return 0;
+    return 0;
 }
